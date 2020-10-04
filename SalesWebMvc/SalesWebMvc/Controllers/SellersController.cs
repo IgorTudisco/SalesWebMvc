@@ -7,6 +7,7 @@ using SalesWebMvc.Models;
 using SalesWebMvc.Models.ViewModels;
 using SalesWebMvc.Services;
 
+
 namespace SalesWebMvc.Controllers
 {
     public class SellersController : Controller
@@ -91,6 +92,29 @@ namespace SalesWebMvc.Controllers
         {
             _sellersService.Remove(id);
             return RedirectToAction(nameof(Index));
+        }
+
+        // Método que tem a ação de monstrar os detalhes
+
+        public IActionResult Details(int? id)
+        {
+            // teste se nulo
+
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var obj = _sellersService.FindById(id.Value);
+
+            // teste se o Id achado existe
+
+            if (obj == null)
+            {
+                return NotFound();
+            }
+
+            return View(obj);
         }
 
     }
