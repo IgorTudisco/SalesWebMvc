@@ -4,19 +4,23 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using SalesWebMvc.Models;
+using SalesWebMvc.Models.ViewModels;
 using SalesWebMvc.Services;
 
 namespace SalesWebMvc.Controllers
 {
     public class SellersController : Controller
     {
-        // Criando a nossa dependencia atraves do construtor com a classe SellerService
+        // Criando a nossa dependencia atraves do construtor com a classe SellerService e DepartmentService
 
         private readonly SellerService _sellersService;
 
-        public SellersController(SellerService sellerService)
+        private readonly DepartmentService _departmentService;
+
+        public SellersController(SellerService sellerService, DepartmentService departmentService)
         {
             _sellersService = sellerService;
+            _departmentService = departmentService;
         }
 
         // inserindo a nossa chamada da lista de vendedores
@@ -28,9 +32,13 @@ namespace SalesWebMvc.Controllers
             return View(list);
         }
 
+        // Método para abrir o formulário para cadastrar um vendedor
+        
         public IActionResult Create()
         {
-            return View();
+            var departments = _departmentService.Findall();
+            var viewModel = new SellerFormViewModel { Departments = departments };
+            return View(viewModel);
         }
 
         // Inserindo o vendedor no banco de dados
