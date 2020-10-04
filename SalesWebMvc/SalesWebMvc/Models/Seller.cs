@@ -15,9 +15,11 @@ namespace SalesWebMvc.Models
 
         public ICollection<SalesRecord> Sales { get; set; } = new List<SalesRecord>();
 
-        public Department Departments { get; set; }
+        public Department Department { get; set; }
 
-        // No metodo Mvc é necessário tem um construtor vazio
+        public int DepartmentId { get; set; }
+
+        // No metodo Mvc é necessário que tenha um construtor vazio
 
         public Seller()
         {
@@ -32,7 +34,7 @@ namespace SalesWebMvc.Models
             Email = email;
             BithDate = bithDate;
             BaseSalary = baseSalary;
-            Departments = departments;
+            Department = departments;
         }
 
         // Metodo para add a venda na nossa lista de venda
