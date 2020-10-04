@@ -43,3 +43,4 @@ C:\Users\pimpa\OneDrive\Área de Trabalho\C# Avançado\Sistema web com ASP .NET 
 C:\Users\pimpa\OneDrive\Área de Trabalho\C# Avançado\Sistema web com ASP .NET Core MVC e Entity Framework\SalesWebMvc\SalesWebMvc\obj\Debug\netcoreapp2.1\SalesWebMvc.csproj.CoreCompileInputs.cache
 C:\Users\pimpa\OneDrive\Área de Trabalho\C# Avançado\Sistema web com ASP .NET Core MVC e Entity Framework\SalesWebMvc\SalesWebMvc\obj\Debug\netcoreapp2.1\Razor\Views\Sellers\Index.cshtml.g.cs
 C:\Users\pimpa\OneDrive\Área de Trabalho\C# Avançado\Sistema web com ASP .NET Core MVC e Entity Framework\SalesWebMvc\SalesWebMvc\obj\Debug\netcoreapp2.1\Razor\Views\Sellers\Create.cshtml.g.cs
+C:\Users\pimpa\OneDrive\Área de Trabalho\C# Avançado\Sistema web com ASP .NET Core MVC e Entity Framework\SalesWebMvc\SalesWebMvc\obj\Debug\netcoreapp2.1\Razor\Views\Sellers\Delete.cshtml.g.cs

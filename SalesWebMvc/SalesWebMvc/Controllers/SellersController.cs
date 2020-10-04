@@ -58,5 +58,40 @@ namespace SalesWebMvc.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        // Método para que o usuário confirme a deleção
+        // O argumento é opsional
+
+        public IActionResult Delete(int? id)
+        {
+            // teste se nulo
+
+            if(id == null)
+            {
+                return NotFound();
+            }
+
+            var obj = _sellersService.FindById(id.Value);
+
+            // teste se o Id achado existe
+
+            if (obj == null)
+            {
+                return NotFound();
+            }
+
+            return View(obj);
+
+        }
+
+        // Método que fará a ação de deletar o vendedor
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Delete(int id)
+        {
+            _sellersService.Remove(id);
+            return RedirectToAction(nameof(Index));
+        }
+
     }
 }
