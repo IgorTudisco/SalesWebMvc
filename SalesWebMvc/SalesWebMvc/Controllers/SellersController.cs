@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using SalesWebMvc.Models;
 using SalesWebMvc.Models.ViewModels;
 using SalesWebMvc.Services;
-
+using SalesWebMvc.Services.Exceptions;
 
 namespace SalesWebMvc.Controllers
 {
@@ -34,7 +31,7 @@ namespace SalesWebMvc.Controllers
         }
 
         // Método para abrir o formulário para cadastrar um vendedor
-        
+
         public IActionResult Create()
         {
             var departments = _departmentService.Findall();
@@ -66,7 +63,7 @@ namespace SalesWebMvc.Controllers
         {
             // teste se nulo
 
-            if(id == null)
+            if (id == null)
             {
                 return NotFound();
             }
@@ -117,5 +114,56 @@ namespace SalesWebMvc.Controllers
             return View(obj);
         }
 
+        // Esse método serve para abrir a caixa de edição.
+        // Os testes são feito para saber se o id é nulo e se existe.
+        // Depois passamos uma listinha para povoar a minha listinha de seleção.
+        // Depois passamos os dados que buscamos do bando de dados, paque se possa fazer a edição.
+
+        public IActionResult Edit(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var obj = _sellersService.FindById(id.Value);
+
+            if (obj == null)
+            {
+                return NotFound();
+            }
+
+            List<Department> departments = _departmentService.Findall();
+            SellerFormViewModel viewModel = new SellerFormViewModel { Seller = obj, Departments = departments };
+            return View(viewModel);
+
+        }
+
+        // Método para salvar as alterações no vendedor
+        // Médoto post
+        
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Edit(int id, Seller seller)
+        {
+            if (id != seller.Id)
+            {
+                return BadRequest();
+            }
+
+            try
+            {
+                _sellersService.Update(seller);
+                return RedirectToAction(nameof(Index));
+            }
+            catch (NotFoundException)
+            {
+                return NotFound();
+            }
+            catch (DbConcurrencyException)
+            {
+                return NotFound();
+            }
+        }
     }
 }
