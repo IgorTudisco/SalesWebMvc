@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using SalesWebMvc.Models;
 using SalesWebMvc.Models.ViewModels;
@@ -24,18 +25,20 @@ namespace SalesWebMvc.Controllers
 
         // inserindo a nossa chamada da lista de vendedores
         // E estamos passando a lista como parânmetro da View.
+        // Mudando de síncrona para assíncrona
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            var list = _sellersService.FinAll();
+            var list = await _sellersService.FinAllAsync();
             return View(list);
         }
 
         // Método para abrir o formulário para cadastrar um vendedor
+        // Mudando de síncrona para assíncrona
 
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
-            var departments = _departmentService.Findall();
+            var departments = await _departmentService.FindallAsync();
             var viewModel = new SellerFormViewModel { Departments = departments };
             return View(viewModel);
         }
@@ -48,28 +51,30 @@ namespace SalesWebMvc.Controllers
         // Colocando um anotation
         // A primeira anotação é para diser que é um método/ação de post
         // A segunda é para evitar ataques de fora. Ataques CSRF.
+        // Mudando de síncrona para assíncrona
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(Seller seller)
+        public async Task<IActionResult> Create(Seller seller)
         {
             // Condição saber se a ação foi feita corretamente
 
             if (!ModelState.IsValid)
             {
-                var departments = _departmentService.Findall();
+                var departments = await _departmentService.FindallAsync();
                 var viewModel = new SellerFormViewModel { Seller = seller, Departments = departments };
                 return View(viewModel);
             }
 
-            _sellersService.Insert(seller);
+           await _sellersService.InsertAsync(seller);
             return RedirectToAction(nameof(Index));
         }
 
         // Método para que o usuário confirme a deleção
         // O argumento é opsional
+        // Mudando de síncrona para assíncrona
 
-        public IActionResult Delete(int? id)
+        public async Task<IActionResult> Delete(int? id)
         {
             // teste se nulo
 
@@ -78,7 +83,7 @@ namespace SalesWebMvc.Controllers
                 return RedirectToAction(nameof(Error), new { massege = "Id not privided" });
             }
 
-            var obj = _sellersService.FindById(id.Value);
+            var obj = await _sellersService.FindByIdAsync(id.Value);
 
             // teste se o Id achado existe
 
@@ -92,18 +97,20 @@ namespace SalesWebMvc.Controllers
         }
 
         // Método que fará a ação de deletar o vendedor
+        // Mudando de síncrona para assíncrona
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
-            _sellersService.Remove(id);
+            await _sellersService.RemoveAsync(id);
             return RedirectToAction(nameof(Index));
         }
 
         // Método que tem a ação de monstrar os detalhes
+        // Mudando de síncrona para assíncrona
 
-        public IActionResult Details(int? id)
+        public async Task<IActionResult> Details(int? id)
         {
             // teste se nulo
 
@@ -112,7 +119,7 @@ namespace SalesWebMvc.Controllers
                 return RedirectToAction(nameof(Error), new { message = "Id not privided" });
             }
 
-            var obj = _sellersService.FindById(id.Value);
+            var obj = await _sellersService.FindByIdAsync(id.Value);
 
             // teste se o Id achado existe
 
@@ -128,22 +135,23 @@ namespace SalesWebMvc.Controllers
         // Os testes são feito para saber se o id é nulo e se existe.
         // Depois passamos uma listinha para povoar a minha listinha de seleção.
         // Depois passamos os dados que buscamos do bando de dados, paque se possa fazer a edição.
+        // Mudando de síncrona para assíncrona
 
-        public IActionResult Edit(int? id)
+        public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
             {
                 return RedirectToAction(nameof(Error), new { message = "Id not provided" });
             }
 
-            var obj = _sellersService.FindById(id.Value);
+            var obj = await _sellersService.FindByIdAsync(id.Value);
 
             if (obj == null)
             {
                 return RedirectToAction(nameof(Error), new { message = "Id not found" });
             }
 
-            List<Department> departments = _departmentService.Findall();
+            List<Department> departments = await _departmentService.FindallAsync();
             SellerFormViewModel viewModel = new SellerFormViewModel { Seller = obj, Departments = departments };
             return View(viewModel);
 
@@ -151,16 +159,17 @@ namespace SalesWebMvc.Controllers
 
         // Método para salvar as alterações no vendedor
         // Médoto post
-        
+        // Mudando de síncrona para assíncrona
+
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(int id, Seller seller)
+        public async Task<IActionResult> Edit(int id, Seller seller)
         {
             // Condição saber se a ação foi feita corretamente
 
             if (!ModelState.IsValid)
             {
-                var departments = _departmentService.Findall();
+                var departments = await _departmentService.FindallAsync();
                 var viewModel = new SellerFormViewModel { Seller = seller, Departments = departments };
                 return View(viewModel);
             }
@@ -172,7 +181,7 @@ namespace SalesWebMvc.Controllers
 
             try
             {
-                _sellersService.Update(seller);
+                await _sellersService.UpdateAsync(seller);
                 return RedirectToAction(nameof(Index));
             }
             catch (NotFoundException e)
@@ -191,6 +200,7 @@ namespace SalesWebMvc.Controllers
         // Método para retornar a view de error.
         // O atributo Message vai receber a mensagem que veio como argumento
         // O atributo RequestId vai receder o Id interno pelo massete abaixo do FrameWork.
+        // Mudando de síncrona para assíncrona
 
         public IActionResult Error(string message)
         {
