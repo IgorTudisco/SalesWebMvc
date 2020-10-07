@@ -98,13 +98,21 @@ namespace SalesWebMvc.Controllers
 
         // Método que fará a ação de deletar o vendedor
         // Mudando de síncrona para assíncrona
+        // Implementando o tratamento do erro
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete(int id)
         {
-            await _sellersService.RemoveAsync(id);
-            return RedirectToAction(nameof(Index));
+            try
+            {
+                await _sellersService.RemoveAsync(id);
+                return RedirectToAction(nameof(Index));
+            }
+            catch (IntegrityException e)
+            {
+                return RedirectToAction(nameof(Error), new { message = e.Message });
+            }
         }
 
         // Método que tem a ação de monstrar os detalhes
